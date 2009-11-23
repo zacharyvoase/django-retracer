@@ -1,23 +1,34 @@
-"""
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
-
-Replace these with more appropriate tests for your application.
-"""
-
-from django.test import TestCase
-
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
+# -*- coding: utf-8 -*-
 
 __test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
 
->>> 1 + 1 == 2
-True
+Initialize the client object.
+
+    >>> from django.test import Client
+    >>> client = Client()
+
+I start out at the index:
+
+    >>> client.get('/').status_code
+    200
+
+Assume I'm now on '/somepage/', and I want to submit some feedback:
+
+    >>> client.get('/feedback/', HTTP_REFERER='/somepage/').status_code
+    200
+
+I have to submit a feedback request:
+
+    >>> response = client.post('/feedback/', data={
+    ...     'name': 'Zachary Voase',
+    ...     'text': 'Awesome site!',
+    ... })
+
+This should be a temporary redirect back to '/somepage/' (although it will have
+been made absolute by Django):
+
+    >>> response.status_code, response['Location']
+    (302, 'http://testserver/somepage/')
+
 """}
 
