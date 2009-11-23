@@ -1,0 +1,50 @@
+<!--*-markdown-*-->
+
+# `django-retracer`
+
+`django-retracer` is a Django application which allows you to store and restore
+old locations. It’s useful in scenarios where you want to remember where the
+client was before, show them a number of pages and then redirect them to the old
+location.
+
+## Example
+
+Here’s an example of how interaction might work:
+
+*   Your user is on a page on your website, say `/somepage/`. They click the
+    ‘Submit Feedback’ link in the footer, because they love your site so much
+    they want to tell you about it. This takes them to `/feedback/`.
+
+*   The view at `/feedback/` stores the old location from the HTTP `Referer`
+    [sic] header, and then displays the form to the user:
+    
+        def feedback(request):
+            if request.method == 'GET':
+                request.stash_referrer()
+                form = FeedbackForm()
+                return render_to_response('feedback/feedback.html',
+                  {'form': form})
+            elif request.method == 'POST':
+                # ... process the form ...
+
+*   When the client submits a valid form, set a flash notice and redirect to the
+    old location:
+    
+        def feedback(request):
+            if request.method == 'GET':
+                # ... see above ...
+            elif request.method == 'POST':
+                form = FeedbackForm(request.POST)
+                if form.is_valid():
+                    form.save()
+                    request.notices.success("Thank you for your feedback!")
+                    # `request.unstash_location()` returns a temporary redirect,
+                    # using the given parameters to generate a default URL if
+                    # no previous location is stored.
+                    return request.unstash_location('/')
+                else:
+                    # ... handle invalid forms ...
+
+This stashing/unstashing of locations is especially useful when used in
+conjunction with ‘flash notices’, as may be provided by
+[`django-attention`](http://bitbucket.org/zacharyvoase/django-attention).
