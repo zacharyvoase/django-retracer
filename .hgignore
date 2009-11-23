@@ -1,0 +1,8 @@
+syntax: glob
+
+.DS_Store
+build
+dist
+MANIFEST
+*.pyc
+*.pyo
