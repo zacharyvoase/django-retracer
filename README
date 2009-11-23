@@ -81,10 +81,14 @@ under. By default, this is `'_location'`.
 ### Unstashing Locations
 
     def myview(request):
-        # Temporary Redirect (302)
+        # Temporary Redirect (302):
         return request.unstash_location()
-        # Permanent Redirect (301)
+        # Permanent Redirect (301):
         return request.unstash_location(permanent=True)
-        # Unstashing with a default fallback
+        # Unstashing with a default fallback:
         return request.unstash_location_with_default(
-            'someview', arg1, arg2, kwarg1=value1, kwarg2=value2)
+            'someview', args=(arg1, arg2), kwargs={'key1': 'value1'},
+            permanent=False)
+        # Unstashing with a randomly-generated query parameter, to avoid
+        # caching issues:
+        return request.unstash_location(nonce=True)
