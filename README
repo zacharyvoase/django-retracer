@@ -38,13 +38,53 @@ Here’s an example of how interaction might work:
                 if form.is_valid():
                     form.save()
                     request.notices.success("Thank you for your feedback!")
-                    # `request.unstash_location()` returns a temporary redirect,
-                    # using the given parameters to generate a default URL if
-                    # no previous location is stored.
-                    return request.unstash_location('/')
+                    # `request.unstash_location_with_default()` returns a 
+                    # temporary redirect, using the given parameters to generate
+                    # a default URL if no previous location is stored.
+                    return request.unstash_location_with_default('/')
                 else:
                     # ... handle invalid forms ...
 
 This stashing/unstashing of locations is especially useful when used in
 conjunction with ‘flash notices’, as may be provided by
 [`django-attention`](http://bitbucket.org/zacharyvoase/django-attention).
+
+## Installation
+
+*   Getting the app onto your Python path is as easy as:
+    
+    *   `easy_install django-retracer`, or
+    *   `pip install django-retracer`
+
+*   Add `'djretr'` to your `INSTALLED_APPS` setting. `'django.contrib.session'`
+    must also be installed for `django-retracer` to work.
+
+*   Add `djretr.middleware.RetracerMiddleware` to your `MIDDLEWARE_CLASSES`
+    setting. This must come *after* `SessionMiddleware`.
+
+## Configuration
+
+You can set the `RETRACER_SESSION_KEY` attribute to a string specifying what key
+in the session dictionary you want the currently stashed location to be stored
+under. By default, this is `'_location'`.
+
+## Usage
+
+### Stashing Locations
+
+    def myview(request):
+        # stash an absolute location:
+        request.stash_location('/somewhere/')
+        # stash the current referrer, falling back on a default:
+        request.stash_referrer('/default/')
+
+### Unstashing Locations
+
+    def myview(request):
+        # Temporary Redirect (302)
+        return request.unstash_location()
+        # Permanent Redirect (301)
+        return request.unstash_location(permanent=True)
+        # Unstashing with a default fallback
+        return request.unstash_location_with_default(
+            'someview', arg1, arg2, kwarg1=value1, kwarg2=value2)
