@@ -44,8 +44,12 @@ Here’s an example of how interaction might work:
                     # ... handle invalid forms ...
 
 This stashing/unstashing of locations is especially useful when used in
-conjunction with ‘flash notices’, as may be provided by
-[`django-attention`](http://github.com/zacharyvoase/django-attention).
+conjunction with ‘flash notices’. In Django v1.2, these are available in the
+[messages framework][]; [a backport also exists][gh-django-messages-framework]
+for Django v1.1.1.
+
+  [messages framework]: http://docs.djangoproject.com/en/dev/ref/contrib/messages/#ref-contrib-messages
+  [gh-django-messages-framework]: http://github.com/mikexstudios/django-messages-framework
 
 ## Installation
 
