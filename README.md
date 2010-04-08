@@ -1,5 +1,3 @@
-<!--*-markdown-*-->
-
 # `django-retracer`
 
 `django-retracer` is a Django application which allows you to store and restore
@@ -47,7 +45,7 @@ Here’s an example of how interaction might work:
 
 This stashing/unstashing of locations is especially useful when used in
 conjunction with ‘flash notices’, as may be provided by
-[`django-attention`](http://bitbucket.org/zacharyvoase/django-attention).
+[`django-attention`](http://github.com/zacharyvoase/django-attention).
 
 ## Installation
 

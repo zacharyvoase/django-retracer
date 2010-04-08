@@ -31,7 +31,7 @@ distutils.core.setup(**{
     'version':      get_version(),
     'author':       'Zachary Voase',
     'author_email': 'zacharyvoase@me.com',
-    'url':          'http://bitbucket.org/zacharyvoase/django-retracer',
+    'url':          'http://github.com/zacharyvoase/django-retracer',
     'description':  'Store and restore old locations in Django.',
     'packages':     find_packages(),
     'package_dir':  {'': 'src'},
